@@ -1,3 +1,4 @@
+import React from "react";
 import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 
@@ -133,7 +134,7 @@ function App() {
       </Routes>
 
       <footer>
-        Name: Vemareddygari Pallavi | Register Number: 212225230293
+        Name: Vemareddygari Pallavi| Register Number: 212225230293
       </footer>
     </BrowserRouter>
   );
