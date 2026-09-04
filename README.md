@@ -427,6 +427,6 @@ index.html
 ## OUTPUT
 ![alt text](image.png)
 ![alt text](image-2.png)
-![alt text](image-1.png)
+![alt text](image-3.png)
 ## RESULT
 The BMI Calculator successfully takes user input for height and weight, performs the BMI calculation in real-time using React state and event handling, and displays the BMI value along with the corresponding health category.
