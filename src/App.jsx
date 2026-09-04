@@ -1,6 +1,12 @@
-import React from "react";
-import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import React, { useState } from "react";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Link,
+  useNavigate,
+  useLocation,
+} from "react-router-dom";
 
 function Home() {
   return (
@@ -9,18 +15,22 @@ function Home() {
         <h1>BMI Calculator</h1>
 
         <p>
-          Calculate your Body Mass Index and know your health category.
+          Calculate your Body Mass Index and know your
+          <br />
+          health category.
         </p>
 
         <Link to="/bmi">
           <button>Start Calculator</button>
         </Link>
       </div>
+
+      <Footer />
     </div>
   );
 }
 
-function BMI() {
+function BMICalculator() {
   const [height, setHeight] = useState("");
   const [weight, setWeight] = useState("");
   const [error, setError] = useState("");
@@ -30,19 +40,17 @@ function BMI() {
   const calculateBMI = (e) => {
     e.preventDefault();
 
-    if (height === "" || weight === "") {
-      setError("Please enter both height and weight.");
-      return;
-    }
+    const h = Number(height);
+    const w = Number(weight);
 
-    if (Number(height) <= 0 || Number(weight) <= 0) {
-      setError("Height and weight must be greater than 0.");
+    if (!h || !w || h <= 0 || w <= 0) {
+      setError("Please enter valid height and weight.");
       return;
     }
 
     setError("");
 
-    navigate(`/result?height=${height}&weight=${weight}`);
+    navigate(`/result?height=${h}&weight=${w}`);
   };
 
   return (
@@ -55,7 +63,7 @@ function BMI() {
 
           <input
             type="number"
-            placeholder="Enter height in cm"
+            placeholder="Enter height"
             value={height}
             onChange={(e) => setHeight(e.target.value)}
           />
@@ -64,7 +72,7 @@ function BMI() {
 
           <input
             type="number"
-            placeholder="Enter weight in kg"
+            placeholder="Enter weight"
             value={weight}
             onChange={(e) => setWeight(e.target.value)}
           />
@@ -74,23 +82,28 @@ function BMI() {
           <button type="submit">Calculate BMI</button>
         </form>
 
-        <Link to="/">Back to Home</Link>
+        <Link to="/" className="back-link">
+          ← Back to Home
+        </Link>
       </div>
+
+      <Footer />
     </div>
   );
 }
 
 function Result() {
-  const params = new URLSearchParams(window.location.search);
+  const location = useLocation();
+
+  const params = new URLSearchParams(location.search);
 
   const height = Number(params.get("height"));
   const weight = Number(params.get("weight"));
 
   const heightInMeters = height / 100;
-
   const bmi = weight / (heightInMeters * heightInMeters);
 
-  let category;
+  let category = "";
 
   if (bmi < 18.5) {
     category = "Underweight";
@@ -107,20 +120,35 @@ function Result() {
       <div className="card result-card">
         <h1>Your BMI Result</h1>
 
-        <div className="bmi-value">
-          {bmi.toFixed(2)}
-        </div>
+        <div className="bmi-value">{bmi.toFixed(2)}</div>
 
         <h2>{category}</h2>
 
-        <p>Height: {height} cm</p>
-        <p>Weight: {weight} kg</p>
+        <div className="details">
+          <p>
+            <strong>Height:</strong> {height} cm
+          </p>
+
+          <p>
+            <strong>Weight:</strong> {weight} kg
+          </p>
+        </div>
 
         <Link to="/bmi">
           <button>Calculate Again</button>
         </Link>
       </div>
+
+      <Footer />
     </div>
+  );
+}
+
+function Footer() {
+  return (
+    <footer>
+      Name: Vemareddygari Pallavi | Register Number: 212225230293
+    </footer>
   );
 }
 
@@ -129,13 +157,9 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/bmi" element={<BMI />} />
+        <Route path="/bmi" element={<BMICalculator />} />
         <Route path="/result" element={<Result />} />
       </Routes>
-
-      <footer>
-        Name: Vemareddygari Pallavi| Register Number: 212225230293
-      </footer>
     </BrowserRouter>
   );
 }
